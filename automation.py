@@ -18,11 +18,11 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 # Open the Google Sheet
-sheet = client.open("ActiveCampaign Contacts").sheet1
+sheet = client.open_by_key("YOUR_GOOGLE_SHEET_ID").sheet1  # Use Google Sheet ID
 
 # ActiveCampaign API Setup
-AC_API_URL = os.environ.get("AC_API_URL")  # Use Environment Variable
-AC_API_KEY = os.environ.get("AC_API_KEY")  # Use Environment Variable
+AC_API_URL = os.environ.get("AC_API_URL")
+AC_API_KEY = os.environ.get("AC_API_KEY")
 
 def resubscribe_contact(email):
     """Re-subscribe a contact using ActiveCampaign API."""
@@ -48,9 +48,11 @@ def webhook():
             print("Request is not JSON")
             return jsonify({"error": "Request must be JSON"}), 400
 
+        # Get JSON payload and print it for debugging
         data = request.get_json()
-        print("Received JSON payload:", json.dumps(data, indent=2))  # Print payload
+        print("Received JSON payload:", json.dumps(data, indent=2))
 
+        # Handle both single and multiple contacts
         contacts = data.get("contacts") or data.get("contact") or []
         if isinstance(contacts, dict):
             contacts = [contacts]
@@ -59,6 +61,7 @@ def webhook():
             print("No contacts found")
             return jsonify({"error": "No contacts provided"}), 400
 
+        # Process each contact
         for contact in contacts:
             email = contact.get("email")
             if email:
@@ -79,3 +82,25 @@ def webhook():
     except Exception as e:
         print("Error occurred:", str(e))
         return jsonify({"error": str(e)}), 500
+
+
+@app.route('/test-google-sheets', methods=['GET'])
+def test_google_sheets():
+    """Test if Google Sheets connection works."""
+    try:
+        sheet.append_row(["Test Email", "First Name", "Last Name", "1234567890"])
+        return jsonify({"message": "Google Sheets access successful"}), 200
+    except Exception as e:
+        print("Google Sheets Error:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/')
+def home():
+    """Root route for health check."""
+    return "Webhook service is running!", 200
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))  # Default to port 10000 for Render
+    app.run(host="0.0.0.0", port=port, debug=True)  # Enable Debug Mode
