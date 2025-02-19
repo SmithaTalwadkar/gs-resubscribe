@@ -21,8 +21,8 @@ client = gspread.authorize(creds)
 sheet = client.open_by_key("1RUyZAOSdtAMG74aa6qa9h3AGfXvz5UYxGeLlqPpzqqE").sheet1  # Use Google Sheet ID
 
 # ActiveCampaign API Setup
-AC_API_URL = os.environ.get("AC_API_URL")
-AC_API_KEY = os.environ.get("AC_API_KEY")
+AC_API_URL = os.environ.get("https://chop.api-us1.com")
+AC_API_KEY = os.environ.get("0469ca239ca1c379f57ddfaf5079c5abeb4acebc2b12d3562525ff6c2c9486d4ba29a5ac")
 
 def resubscribe_contact(email):
     """Re-subscribe a contact using ActiveCampaign API."""
