@@ -43,7 +43,7 @@ UBJtfsv2ZKx+JPxLYnY9YC7NjU0CuFS+n0mvlkrXAoGBAIWiJVibN5bx4eajoXri
 6mVFksFJ+lvSw5D6zqAVnMbCYS+bl4ObCwdOx0AS94JZW4dVA/RBPBZ/h+OcASpE
 usGkBqeTABad0GD5QwTXT6A9cc+s7zbJHgzn2WB2s+xgbmbizOjttiJVnAPBwQtj
 ZVNy6V9WD2dnXnz26yMpXDu7
------END PRIVATE KEY-----"""\n,
+-----END PRIVATE KEY-----""",
     "client_email": "contact-re-subscription@contact-re-subscription.iam.gserviceaccount.com",
     "client_id": "113077265641381114597",
     "auth_uri": "https://accounts.google.com/o/oauth2/auth",
