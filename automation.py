@@ -101,3 +101,23 @@ def webhook():
     except Exception as e:
         print("Error occurred:", str(e))
         return jsonify({"error": str(e)}), 500
+@app.route('/test-google-sheets', methods=['GET'])
+def test_google_sheets():
+    """Test if Google Sheets connection works."""
+    try:
+        sheet.append_row(["Test Email", "First Name", "Last Name", "1234567890"])
+        return jsonify({"message": "Google Sheets access successful"}), 200
+    except Exception as e:
+        print("Google Sheets Error:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/')
+def home():
+    """Root route for health check."""
+    return "Webhook service is running!", 200
+
+
+if __name__ == '__main__':
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host="0.0.0.0", port=port, debug=False)
