@@ -1,23 +1,31 @@
 from flask import Flask, request, jsonify
+import os
+import json
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import requests
 import time
 
+# Initialize Flask app
 app = Flask(__name__)
 
-# Google Sheets API Setup
+# Google Sheets API Setup using Environment Variable
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("google-credentials.json", scope)
+
+# Load Google credentials from environment variable
+creds_dict = json.loads(os.environ["GOOGLE_CREDENTIALS"])
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
+
+# Open the Google Sheet
 sheet = client.open("ActiveCampaign Contacts").sheet1
 
 # ActiveCampaign API Setup
-AC_API_URL = "https://chop.api-us1.com"
-AC_API_KEY = "0469ca239ca1c379f57ddfaf5079c5abeb4acebc2b12d3562525ff6c2c9486d4ba29a5ac"
+AC_API_URL = os.environ.get("AC_API_URL")  # Use Environment Variable
+AC_API_KEY = os.environ.get("AC_API_KEY")  # Use Environment Variable
 
 def resubscribe_contact(email):
-    """Re-subscribe contact using ActiveCampaign API."""
+    """Re-subscribe a contact using ActiveCampaign API."""
     headers = {
         "Api-Token": AC_API_KEY,
         "Content-Type": "application/json"
@@ -61,4 +69,5 @@ def webhook():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
