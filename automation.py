@@ -18,7 +18,7 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 # Open the Google Sheet
-sheet = client.open_by_key("YOUR_GOOGLE_SHEET_ID").sheet1  # Use Google Sheet ID
+sheet = client.open_by_key("1RUyZAOSdtAMG74aa6qa9h3AGfXvz5UYxGeLlqPpzqqE").sheet1  # Use Google Sheet ID
 
 # ActiveCampaign API Setup
 AC_API_URL = os.environ.get("AC_API_URL")
