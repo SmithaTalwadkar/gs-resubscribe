@@ -33,12 +33,12 @@ def resubscribe_contact(email):
             "status": 1  # 1 = Active (Subscribed)
         }
     }
+   try:
     response = requests.post(AC_API_URL, json=data, headers=headers)
     return response.status_code, response.text
-    
 except Exception as e:
-        print(f"Error while re-subscribing {email}: {str(e)}")
-        return 500, str(e)
+    print(f"Error while re-subscribing {email}: {str(e)}")
+    return 500, str(e)
 
 def process_contacts(data):
     """Process contacts asynchronously."""
