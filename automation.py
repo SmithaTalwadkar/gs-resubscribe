@@ -24,22 +24,23 @@ AC_API_KEY = os.environ.get("AC_API_KEY")  # Use the environment variable name
 
 def resubscribe_contact(email):
     """Re-subscribe a contact using ActiveCampaign API."""
-    headers = {
-        "Api-Token": AC_API_KEY,
-        "Content-Type": "application/json"
-    }
-    data = {
-        "contact": {
-            "email": email,
-            "status": 1  # 1 = Active (Subscribed)
+    try:
+        headers = {
+            "Api-Token": AC_API_KEY,
+            "Content-Type": "application/json"
         }
-    }
-   try:
-    response = requests.post(AC_API_URL, json=data, headers=headers)
-    return response.status_code, response.text
-except Exception as e:
-    print(f"Error while re-subscribing {email}: {str(e)}")
-    return 500, str(e)
+        data = {
+            "contact": {
+                "email": email,
+                "status": 1  # 1 = Active (Subscribed)
+            }
+        }
+        response = requests.post(AC_API_URL, json=data, headers=headers)
+        return response.status_code, response.text
+    except Exception as e:
+        print(f"Error while re-subscribing {email}: {str(e)}")
+        return 500, str(e)
+
 
 def process_contacts(data):
     """Process contacts asynchronously."""
@@ -102,6 +103,8 @@ def webhook():
     except Exception as e:
         print("Error occurred:", str(e))
         return jsonify({"error": str(e)}), 500
+
+
 @app.route('/test-google-sheets', methods=['GET'])
 def test_google_sheets():
     """Test if Google Sheets connection works."""
