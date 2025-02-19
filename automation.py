@@ -68,8 +68,10 @@ def webhook():
     """Receive ActiveCampaign Webhook and respond immediately."""
     try:
         if not request.is_json:
+            print("Request is not JSON")
             return jsonify({"error": "Request must be JSON"}), 400
 
+        # Get JSON payload and print it for debugging
         data = request.get_json()
         print("Received JSON payload:", json.dumps(data, indent=2))
 
@@ -81,6 +83,17 @@ def webhook():
 
     except Exception as e:
         print("Error occurred:", str(e))
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route('/test-google-sheets', methods=['GET'])
+def test_google_sheets():
+    """Test if Google Sheets connection works."""
+    try:
+        sheet.append_row(["Test Email", "First Name", "Last Name", "1234567890"])
+        return jsonify({"message": "Google Sheets access successful"}), 200
+    except Exception as e:
+        print("Google Sheets Error:", str(e))
         return jsonify({"error": str(e)}), 500
 
 
