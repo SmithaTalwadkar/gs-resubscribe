@@ -7,10 +7,10 @@ from oauth2client.service_account import ServiceAccountCredentials
 import requests
 import time
 
-# Initialize Flask app
+
 app = Flask(__name__)
 
-# Google Sheets API Setup (Hardcoded Google Credentials)
+
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds_dict = {
     "type": "service_account",
